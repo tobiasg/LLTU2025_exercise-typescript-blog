@@ -1,0 +1,55 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  background-color: #222831;
+  color: #fcfcfc;
+  font-family: "Mozilla Text", sans-serif;
+  max-width: 600px;
+  width: 100%;
+  margin: 32px auto;
+}
+
+input {
+  width: 100%;
+  padding: 0.5rem;
+  margin: 10px 0;
+  border: none;
+  border-radius: 5px;
+}
+
+textarea {
+  width: 100%;
+  height: 100px;
+  padding: 0.5rem;
+  margin: 10px 0;
+  border: none;
+  border-radius: 5px;
+  resize: vertical;
+}
+
+button[type="submit"] {
+  background-color: #1f2935;
+  width: 100%;
+  margin: 0px auto;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 18px;
+  color: #fcfcfc;
+  margin: 0.1rem 0;
+  padding: 0.8rem;
+  text-align: center;
+}
+
+.post-form-section {
+  padding: 1.5rem;
+  background-color: #37485d;
+  margin: 20px 0;
+}
+
+section#posts article {
+  padding-block: 1rem;
+}
