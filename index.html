@@ -12,7 +12,39 @@
     <title>Blog</title>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <main>
+        <section class="post-form-section">
+          <form class="post-form">
+            <label for="title-input">Title</label>
+            <input
+              type="text"
+              id="title-input"
+              class="title-input"
+              name="title"
+              required
+            />
+            <label for="author-input">Author</label>
+            <input
+              type="text"
+              id="author-input"
+              class="author-input"
+              name="author"
+              required
+            />
+            <label for="content-input">Content</label>
+            <textarea
+              id="content-input"
+              class="content-input"
+              name="content"
+              required
+            ></textarea>
+            <button type="submit">Create Post</button>
+          </form>
+        </section>
+        <section id="posts"></section>
+      </main>
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

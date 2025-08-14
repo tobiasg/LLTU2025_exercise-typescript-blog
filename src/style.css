@@ -18,6 +18,8 @@ input {
   margin: 10px 0;
   border: none;
   border-radius: 5px;
+  background-color: #1f2935;
+  color: #fcfcfc;
 }
 
 textarea {
@@ -28,6 +30,8 @@ textarea {
   border: none;
   border-radius: 5px;
   resize: vertical;
+  background-color: #1f2935;
+  color: #fcfcfc;
 }
 
 button[type="submit"] {
@@ -52,4 +56,8 @@ button[type="submit"] {
 
 section#posts article {
   padding-block: 1rem;
+}
+
+section#posts article a {
+  color: #fcfcfc;
 }
