@@ -37,17 +37,22 @@ function createPostElement(post: Post): HTMLElement {
   contentElement.classList.add("content");
   postElement.appendChild(contentElement);
 
+  const actionsElement = document.createElement("div");
+  actionsElement.classList.add("actions");
+
   const editElement = document.createElement("a");
   editElement.innerHTML = "Edit";
   editElement.href = "#";
   editElement.classList.add("edit");
-  postElement.appendChild(editElement);
+  actionsElement.appendChild(editElement);
 
   const deleteElement = document.createElement("a");
   deleteElement.innerHTML = "Delete";
   deleteElement.href = "#";
   deleteElement.classList.add("delete");
-  postElement.appendChild(deleteElement);
+  actionsElement.appendChild(deleteElement);
+
+  postElement.appendChild(actionsElement);
 
   return postElement;
 }
@@ -143,4 +148,102 @@ function deletePost(postElement: HTMLElement): void {
   );
 }
 
-function editPost(postElement: HTMLElement): void {}
+function editPost(postElement: HTMLElement): void {
+  const actionsElement = postElement.querySelector<HTMLDivElement>(".actions")!;
+
+  postElement.querySelector<HTMLParagraphElement>(".author")!.hidden = true;
+  postElement.querySelector<HTMLParagraphElement>(".timestamp")!.hidden = true;
+
+  const titleElement = postElement.querySelector<HTMLElement>(".title")!;
+  const originalTitle = titleElement.textContent!;
+  const titleInput = document.createElement("input");
+  titleInput.classList.add("edit-title");
+  titleInput.name = "title";
+  titleInput.type = "text";
+  titleInput.value = originalTitle;
+  titleElement.replaceWith(titleInput);
+
+  const contentElement = postElement.querySelector<HTMLElement>(".content")!;
+  const originalContent = contentElement.textContent!;
+  const contentTextarea = document.createElement("textarea");
+  contentTextarea.value = originalContent;
+  contentTextarea.classList.add("edit-content");
+  contentElement.replaceWith(contentTextarea);
+
+  const saveButton = document.createElement("button");
+  saveButton.textContent = "Save";
+  saveButton.addEventListener("click", (event) => {
+    updatePost(postElement, titleInput, contentTextarea);
+    event.preventDefault();
+  });
+
+  const cancelButton = document.createElement("button");
+  cancelButton.textContent = "Cancel";
+  cancelButton.addEventListener("click", (event) => {
+    restore(postElement, originalTitle, originalContent);
+    event.preventDefault();
+  });
+
+  actionsElement.innerHTML = "";
+  actionsElement.append(saveButton, cancelButton);
+}
+
+function updatePost(
+  postElement: HTMLElement,
+  titleInput: HTMLInputElement,
+  contentTextarea: HTMLTextAreaElement
+) {
+  const newTitle = titleInput.value.trim();
+  const newContent = contentTextarea.value.trim();
+
+  if (!newTitle || !newContent) {
+    return;
+  }
+
+  const posts: Post[] = getPostsFromLocalStorage();
+  const postIndex = posts.findIndex((post) => post.id === postElement.id);
+
+  if (postIndex !== -1) {
+    posts[postIndex].title = newTitle;
+    posts[postIndex].content = newContent;
+    localStorage.setItem("posts", JSON.stringify(posts));
+  }
+
+  restore(postElement, newTitle, newContent);
+}
+
+function restore(postElement: HTMLElement, title: string, content: string) {
+  const actionsElement = postElement.querySelector<HTMLDivElement>(".actions")!;
+
+  postElement.querySelector<HTMLParagraphElement>(".author")!.hidden = false;
+  postElement.querySelector<HTMLParagraphElement>(".timestamp")!.hidden = false;
+
+  const titleElement = document.createElement("h2");
+  titleElement.textContent = title;
+  titleElement.classList.add("title");
+  const titleInput =
+    postElement.querySelector<HTMLInputElement>(".edit-title")!;
+  titleInput.replaceWith(titleElement);
+
+  const contentElement = document.createElement("p");
+  contentElement.textContent = content;
+  contentElement.classList.add("content");
+  const contentTextarea =
+    postElement.querySelector<HTMLTextAreaElement>(".edit-content")!;
+  contentTextarea.replaceWith(contentElement);
+
+  const editElement = document.createElement("a");
+  editElement.innerHTML = "Edit";
+  editElement.href = "#";
+  editElement.classList.add("edit");
+  actionsElement.appendChild(editElement);
+
+  const deleteElement = document.createElement("a");
+  deleteElement.innerHTML = "Delete";
+  deleteElement.href = "#";
+  deleteElement.classList.add("delete");
+  actionsElement.appendChild(deleteElement);
+
+  actionsElement.innerHTML = "";
+  actionsElement.append(editElement, deleteElement);
+}
