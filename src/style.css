@@ -7,7 +7,7 @@ body {
   background-color: #222831;
   color: #fcfcfc;
   font-family: "Mozilla Text", sans-serif;
-  max-width: 600px;
+  max-width: 800px;
   width: 100%;
   margin: 32px auto;
 }
@@ -34,7 +34,8 @@ textarea {
   color: #fcfcfc;
 }
 
-button[type="submit"] {
+button[type="submit"],
+section#posts article .actions button {
   background-color: #1f2935;
   width: 100%;
   margin: 0px auto;
@@ -54,10 +55,52 @@ button[type="submit"] {
   margin: 20px 0;
 }
 
+section#posts {
+  padding: 1.5rem;
+  background-color: #37485d;
+  margin: 20px 0;
+}
+
+section#posts .empty {
+  text-align: center;
+}
+
 section#posts article {
-  padding-block: 1rem;
+  padding-bottom: 3rem;
+}
+
+section#posts article:last-child {
+  padding-bottom: 0;
 }
 
 section#posts article a {
   color: #fcfcfc;
+}
+
+section#posts article .author {
+  color: #b0b0b0;
+  padding-bottom: 0.5rem;
+}
+section#posts article .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+section#posts article .post-header .title {
+  margin: 0;
+}
+
+section#posts article .post-header .timestamp {
+  color: #b0b0b0;
+}
+
+section#posts article .actions {
+  display: flex;
+  gap: 1rem;
+  padding-top: 0.5rem;
+}
+
+section#posts article .actions a {
+  color: #b0b0b0;
 }

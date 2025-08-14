@@ -17,20 +17,25 @@ function createPostElement(post: Post): HTMLElement {
   postElement.id = id;
   postElement.classList.add("post");
 
+  const postHeaderElement = document.createElement("div");
+  postHeaderElement.classList.add("header");
+
   const titleElement = document.createElement("h2");
   titleElement.textContent = title;
   titleElement.classList.add("title");
-  postElement.appendChild(titleElement);
+  postHeaderElement.appendChild(titleElement);
+
+  const timestampElement = document.createElement("p");
+  timestampElement.textContent = created_at.toDateString();
+  timestampElement.classList.add("timestamp");
+  postHeaderElement.appendChild(timestampElement);
+
+  postElement.appendChild(postHeaderElement);
 
   const authorElement = document.createElement("p");
   authorElement.textContent = author;
   authorElement.classList.add("author");
   postElement.appendChild(authorElement);
-
-  const timestampElement = document.createElement("p");
-  timestampElement.textContent = created_at.toISOString();
-  timestampElement.classList.add("timestamp");
-  postElement.appendChild(timestampElement);
 
   const contentElement = document.createElement("p");
   contentElement.textContent = content;
@@ -55,6 +60,29 @@ function createPostElement(post: Post): HTMLElement {
   postElement.appendChild(actionsElement);
 
   return postElement;
+}
+
+function createEmptyStateElement(): HTMLElement {
+  const emptyStateElement = document.createElement("p");
+  emptyStateElement.textContent = "No posts";
+  emptyStateElement.classList.add("empty");
+  return emptyStateElement;
+}
+
+function hideEmptyState(): void {
+  const emptyStateElement = sectionPosts.querySelector(".empty");
+  if (emptyStateElement) {
+    emptyStateElement.remove();
+  }
+}
+
+function showEmptyState(): void {
+  if (
+    sectionPosts.querySelectorAll(".post").length === 0 &&
+    !sectionPosts.querySelector(".empty")
+  ) {
+    sectionPosts.appendChild(createEmptyStateElement());
+  }
 }
 
 function handleAddPost(event: SubmitEvent) {
@@ -83,6 +111,8 @@ function handleAddPost(event: SubmitEvent) {
     created_at: new Date(),
   };
 
+  hideEmptyState();
+
   sectionPosts.insertAdjacentElement("afterbegin", createPostElement(post));
 
   savePost(post);
@@ -96,13 +126,18 @@ function loadPosts(): Post[] {
   const posts = getPostsFromLocalStorage();
   sectionPosts.innerHTML = "";
 
-  posts
-    .sort((a, b) => b.created_at.getTime() - a.created_at.getTime())
-    .forEach((post: Post) => {
-      sectionPosts.appendChild(createPostElement(post));
-    });
+  if (posts.length == 0) {
+    sectionPosts.appendChild(createEmptyStateElement());
+    return [];
+  } else {
+    posts
+      .sort((a, b) => b.created_at.getTime() - a.created_at.getTime())
+      .forEach((post: Post) => {
+        sectionPosts.appendChild(createPostElement(post));
+      });
 
-  return posts;
+    return posts;
+  }
 }
 
 function savePost(post: Post) {
@@ -146,6 +181,8 @@ function deletePost(postElement: HTMLElement): void {
     "posts",
     JSON.stringify(posts.filter((post) => post.id !== postElement.id))
   );
+
+  showEmptyState();
 }
 
 function editPost(postElement: HTMLElement): void {
